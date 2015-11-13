@@ -3,13 +3,12 @@ layout: page
 title: About
 permalink: /about/
 ---
+Passionate about my job and everything technological. Loves to solve problems and to try and learn new things.
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Senior Software developer currently working at [LS Instruments](http://lsinstruments.ch) 
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
+Find me on
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+* [Twitter](http://twitter.com/gimly81)
+* [LinkedIn](https://ch.linkedin.com/in/xavier-hahn-7948591)
+* [GitHub](https://github.com//gimly)
