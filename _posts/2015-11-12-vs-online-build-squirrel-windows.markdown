@@ -47,13 +47,13 @@ Procedure
 
 OK, enough talking, let's dive into the complete process. First, open your project on Visual Studio Online, go to the Build tab and hit the green "+" arrow on the left. This will open the *Create new Build Definition* 
 
-![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Create_New_Build_Definition.jpg "Create New Build Definition Template Selection")
+![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Create_New_Build_Definition.JPG "Create New Build Definition Template Selection")
 
 You can either chose to start with a template or start empty. As you can see, it's not only able to build .Net applications using Visual Studio, but also Xamarin and Xcode. Choose the Visual Studio template and click *Next*.
 
 You can then select the settings of on which repository the build will be run, and which branch will be used to do the build. A checkbox at the bottom can be used to define if you want the build to be run at each checkin.
 
-![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Create_New_Build_Definition_Settings.jpg "Create New Build Definition Settings")
+![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Create_New_Build_Definition_Settings.JPG "Create New Build Definition Settings")
 
 Select the correct repository and branch and click on the *Create* button.
 
