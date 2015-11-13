@@ -2,7 +2,12 @@
 layout: post
 title:  "Using Visual Studio Online Build, Squirrel and Azure for continuous integration and deployment of a desktop application."
 date:   2015-11-13 10:00:00 +0100
-categories: Visual Studio Online, Build, Continuous integration, Squirrel.Windows
+categories: VSOnline
+tags:
+- Visual Studio Online
+- Build
+- Continuous integration
+- Squirrel.Windows
 ---
 Introduction
 ============
