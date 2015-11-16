@@ -85,7 +85,7 @@ Each build should get a unique identifier to be easily identified. This meaningf
 
 As you can see, it uses flags that are replaced based on the date, and number of build run. You can get a complete list of the available flags [on MSDN](https://msdn.microsoft.com/en-us/library/hh190719.aspx). You can edit the build numer format by going to the *General* tab of the build definition:
 
- ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Build_definition_general_Tab.jpg "Build definition general tab")
+ ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Build_definition_General_Tab.jpg "Build definition general tab")
  
  When using continuous integration, it is very useful to be able to link back the current version of the application to the build. A nice way to do this is to use the build number as the version number for the application. An easy way to do this, is to create a PowerShell script that will be run before the build process and that will modify the `AssemblyVersion` in the `AssemblyInfo.cs` files contained in your project.
  
