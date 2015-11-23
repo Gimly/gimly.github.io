@@ -3,6 +3,7 @@ layout: post
 title:  "Successful git branching model cheat sheet."
 date:   2015-11-23 10:00:00 +0100
 categories: Git
+comments: True
 tags:
 - Git
 - Branching
