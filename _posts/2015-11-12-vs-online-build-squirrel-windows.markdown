@@ -12,7 +12,7 @@ tags:
 Introduction
 ============
 
-I am currently working on a WPF desktop application that is controlling a complex instrument. The software is installed locally on customer's machines and we would like to simplify the application update process as much as possible.
+I am working on a WPF desktop application that is controlling a complex instrument. The software gets installed locally on customer's machines and we would like to simplify the application update process as much as possible.
 
 Fortunately, with the relatively new Squirrel.Windows, it has become easy to create an auto-updating application. [Squirrel.Windows](https://github.com/Squirrel/Squirrel.Windows), is an installation and update framework, it puts itself in the same vein as "ClickOnce", meaning a very simple and transparent install process for your application, simply start the setup.exe and it will install and run the app. It has also built-in update capabilities, with the app "calling" a server to see if it has an update and updating itself when needed.
 
@@ -38,14 +38,14 @@ The tools we are going to use:
 * [Squirrel.Windows](https://github.com/Squirrel/Squirrel.Windows) - For installing and updating your application
 * PowerShell - For all the scripting needs. VS Online build system allows to run PowerShell scripts during the build process, really useful
 * Code signing certificate - Important to remove those annoying messages that the application is not safe during the install
-* Azure Blob storage - To publish the application setup. You can probably use something else, like Amazon cloud storage, or any storage where people can then download your application from. Azure is easy because it has build steps directly in VS Online build process.
+* Azure Blob storage - To publish the application setup. You can probably use something else, like Amazon cloud storage, or any storage where people can then download your application from. Azure is easy because it has "build steps" directly in VS Online build process.
 
 Prerequisites
 =============
 
 I won't dive into the details on how to use the rest of Visual Studio Online, you should already be able to add your code to the source control system of your choice. Personnally, I'm using Git, but this guide should work as well with TFS Source Control.
 
-So, in order to follow this guide, you should already have the code of your WPF/WinForms app pushed to the Visual Studio Online repository.
+So, to follow this guide, you should already have the code of your WPF/WinForms app pushed to the Visual Studio Online repository.
 
 Procedure
 =========
@@ -56,20 +56,20 @@ OK, enough talking, let's dive into the complete process. First, open your proje
 
 You can either chose to start with a template or start empty. As you can see, it's not only able to build .Net applications using Visual Studio, but also Xamarin and Xcode. Choose the Visual Studio template and click *Next*.
 
-You can then select the settings of on which repository the build will be run, and which branch will be used to do the build. A checkbox at the bottom can be used to define if you want the build to be run at each checkin.
+You can then select the settings of on which repository the build runs, and which branch is used to do the build. A check box at the bottom allows to define if you want the *build* run at each check-in.
 
 ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Create_New_Build_Definition_Settings.JPG "Create New Build Definition Settings")
 
 Select the correct repository and branch and click on the *Create* button.
 
-A default build definition is created with the four following steps pre-defined:
+A default build definition with the four following steps pre-defined:
 
  ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Default_build_definition.jpg "Default build definition")
  
 * **Visual Studio Build** - Relatively self-explanatory, allows you to build your application. It should already be pre-configured and ready to use. It will search for a `.sln` file and start the build process on the contained projects. It also has the ability to *Restore Nuget Packages* automatically.
 * **Visual Studio Test** - By default, this step will search all compiled dlls that contain *test* and will try to run unit tests on it. The step will fail if Unit tests have failed, making sure you don't publish things that have non-passing unit tests.
-* **Index Sources & Publish Symbols** - This step is useful if you're using *.pdb* files to help you debug your application. It will basically copy all your *.pdb* files to a *symbols folder* so that it can be retrieved and used for debugging sessions.
-* **Publish Build Artifacts** - This steps allows you to copy binaries and other files created by the build process on a server of file share so that they can be downloaded. Very useful for debugging and testing the build project, will copy the files that you have selected and allows to be downloaded as a .zip file.
+* **Index Sources & Publish Symbols** - This step is useful if you're using *.pdb* files to help you debug your application. It will basically copy all your *.pdb* files to a *symbols folder* to retrieve and use for debugging sessions.
+* **Publish Build Artifacts** - This steps allows you to copy binaries and other files created by the build process on a server of file share to download. Very useful for debugging and testing the build project, will copy the files that you have selected and allows to download as a .zip file.
 
 ##Get the latest version of the sources from the source control##
 
@@ -79,17 +79,17 @@ Therefore, there is nothing you need to do for this, it's done automatically for
 
 ##Update the assembly version to the current build version##
 
-Each build should get a unique identifier to be easily identified. This meaningful name is called the *build number*. By default, the build number is created using this format:
+Each build should get a unique identifier for identification. This meaningful name is the *build number*. By default, the build number uses this format:
 
-`$(Date:yyyyMMdd)$(Rev:.r)` which will result in something tht looks like this `20090824.2`
+`$(Date:yyyyMMdd)$(Rev:.r)` which will result in something that looks like this: `20090824.2`
 
-As you can see, it uses flags that are replaced based on the date, and number of build run. You can get a complete list of the available flags [on MSDN](https://msdn.microsoft.com/en-us/library/hh190719.aspx). You can edit the build numer format by going to the *General* tab of the build definition:
+As you can see, it uses flags replaced based on the date, and the amount of builds run. You can get a complete list of the available flags [on MSDN](https://msdn.microsoft.com/en-us/library/hh190719.aspx). You can edit the build number format by going to the *General* tab of the build definition:
 
  ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Build_definition_General_Tab.jpg "Build definition general tab")
  
- When using continuous integration, it is very useful to be able to link back the current version of the application to the build. A nice way to do this is to use the build number as the version number for the application. An easy way to do this, is to create a PowerShell script that will be run before the build process and that will modify the `AssemblyVersion` in the `AssemblyInfo.cs` files contained in your project.
+ When using continuous integration, it is very useful to link back the current version of the application to the build. A nice way to do this is to use the build number as the version number for the application. To do this, create a PowerShell script that runs before the build process and that modifies the `AssemblyVersion` in the `AssemblyInfo.cs` files contained in your project.
  
- In my solution, I'm using a modified version of a [code sample from a MSDN page](https://msdn.microsoft.com/Library/vs/alm/Build/scripts/index). I have simplified it greatly because I'm using a *trick* to have only one `SharedAssemblyInfo.cs` files that contains the `AssemblyVersion` for all my projects. If you're interested, you can check the how-to for this trick [here](http://weblogs.asp.net/ashishnjain/sharing-assembly-version-across-projects-in-a-solution).
+ In my solution, I'm using a modified version of a [code sample from a MSDN page](https://msdn.microsoft.com/Library/vs/alm/Build/scripts/index). I have simplified it greatly because I'm using a *trick* to have only one `SharedAssemblyInfo.cs` files that has the `AssemblyVersion` for all my projects. If you're interested, you can check the how-to for this trick [here](http://weblogs.asp.net/ashishnjain/sharing-assembly-version-across-projects-in-a-solution).
  
 <script src="https://gist.github.com/Gimly/9f00a1adb03272b11d6e.js"></script>
 
@@ -106,7 +106,7 @@ Not much to do at this step, you can normally leave the *Visual Studio Build* st
 
 ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Build_application.jpg "Visual Studio Build step")
 
-You can see that, in my case, I have removed the checkbox to *Restore NuGet Packages* in the Build definition, and have added a *NuGet Installer* step at the beginning of the build process. The idea here is that it would allow me to run scripts before the build, but after the NuGet restore. I could, for example, call a utility that would be installed through a NuGet package.
+You can see that, in my case, I have removed the checkbox to *Restore NuGet Packages* in the Build definition, and have added a *NuGet Installer* step at the beginning of the build process. The idea here is that it would allow me to run scripts before the build, but after the NuGet restore. For example, it could call a utility that would be installed through a NuGet package.
 
 ## Sign the application using a code signing certificate ##
  
@@ -134,8 +134,8 @@ Now that we have signed our `.exe`, we can create the NuGet package for Squirrel
 
 The important points are the following:
 
-- All the files should be under a lib/net45 folder
-- There should be no dependency
+- All the files must be under a lib/net45 folder
+- There must be no dependency
 - The package ID should be the "App name" and should not contain spaces.
 - You have to have the `squirrel.dll` in the package.
 - There is a [set of conventions](https://github.com/Squirrel/Squirrel.Windows/blob/master/docs/naming-conventions.md) that defines the name of shortcuts, product version, icon, app folder, etc.
@@ -146,7 +146,7 @@ As you will see, it uses `nuspec` file to define what will be in the package. He
 
 <script src="https://gist.github.com/Gimly/5f6b1b8f9c2e29655c20.js"></script>
 
-I think it's relatively self-explanatory, I'm getting all `.exe`, `.dll` and `.config` files that were copied by the build into the `/bin/Release` folder and pack them in a `/lib/net45` target in the NuGet package. As you can see, I also have an "Utils" folder that I'm also copying to the folder. It will be copied in the installation folder, like the dlls and exe.
+I think it's relatively self-explanatory, I'm getting all `.exe`, `.dll` and `.config` files that the build process copies into the `/bin/Release` folder and pack them in a `/lib/net45` target in the NuGet package. As you can see, I also have an "Utils" folder that I'm also copying to the folder. After the install, it goes to the installation folder, like the dlls and exe.
 
 Using the tag `$version$` in the `<version>` tag allows the use of the *Use Build number to version package* checkbox on the *NuGet Packager* build step. This way, the NuGet package version will match your build version. You also have to select a folder in which the package will be created.
 
@@ -154,7 +154,7 @@ Using the tag `$version$` in the `<version>` tag allows the use of the *Use Buil
  
 ## Run the Squirrel release creation tool and sign the resulting .exe ##
  
-To create the Squirrel setup files from the NuGet package, you have to run a little tool, called `Squirrel` that has a `--releasify` command that will tell him to create a release from the setup. You can check the (a little too succinct) help about this tool in [Squirrel's documentation](https://github.com/Squirrel/Squirrel.Windows/blob/master/docs/advanced-releasify.md). 
+To create the Squirrel setup files from the NuGet package, you have to run a little tool, called `Squirrel` that has a `--releasify` command that will tell him to create a release from the setup. You can check the (a little too concise) help about this tool in [Squirrel's documentation](https://github.com/Squirrel/Squirrel.Windows/blob/master/docs/advanced-releasify.md). 
  
 If you have installed Squirrel in your project using NuGet, it will be in the `.\packages\squirrel.windows.1.x.x\tools` folder.
  
@@ -164,11 +164,11 @@ You call it this way:
 
 The way it works is that if the `Release` folder doesn't exist, he will create the first version of the application. He will copy the `.nupkg` and add a `-full` suffix at its name. He will also copy a `Setup.exe` in the release folder and create a `RELEASE` file that will contain a list of releases of the application, with the name of the NuGet package and a unique identifier for each.
 
-If the folder exists and contains releases already, he will compare the latest release contained in the folder with the NuGet package that we passed to the command. He will then create two files, one with the suffix `-delta` that will contain only the difference between the previous version and the current (for updates), and one with the suffix `-full` that contains the full version (for new installs).
+If the folder exists and has releases already, he will compare the latest release contained in the folder with the NuGet package that we passed to the command. He will then create two files, one with the suffix `-delta` that will contain only the difference between the earlier version and the current (for updates), and one with the suffix `-full` containing the full version (for new installs).
 
 ### Copy release from Azure Blob storage ###
 
-As you understand, to have the "releasification" work correctly, Squirrel needs to have access to the `Release` folder containing all the existing releases. The issue is that, with Visual Studio Online's build process, the build folder seems to always destroy all directories that were created during the build, and I couldn't find any solution to tell him to keep some specific folder.
+As you understand, to have the "releasification" work correctly, Squirrel needs to have access to the `Release` folder containing all the existing releases. The issue is that, with Visual Studio Online's build process, the build folder seems to always destroy all directories created during the build, and I couldn't find any solution to tell him to keep some specific folder.
 
 The workaround I found for this issue was to simply copy back the folder from Azure to the build machine before the call to `releasify`. Again, I'm using a PowerShell script that does it this way.
 
@@ -176,13 +176,13 @@ The workaround I found for this issue was to simply copy back the folder from Az
 
 Again, nothing very complicated in this script, I'm creating a storage context by passing him the account name and key, list the blobs contained in a container and download them to the `Release` folder.
 
-If you're lost on what a Azure storage, Container and blob is, don't worry, I'll explain later when we'll talk about publishing the application to Azure.
+If you're lost on what an Azure storage, Container and blob is, don't worry, I'll explain later when we'll talk about publishing the application to Azure.
 
 Copying back the files from Azure feels a bit "dirty", but is relatively quick. There is maybe a better solution, but I haven't found it yet. Feel free to send me a comment if you have a better/more clever idea.
 
 ### Call releasify ###
 
-Now that we have copied the Release folder back into the machine, we can call releasify. The script is quite self-explanatory. The only trick I'm doing is that I'm "guessing" the name of the NuGet package from the build number, and signing the `Setup.exe` after it has been created with my code certificate.
+Now that we have copied the Release folder back into the machine, we can call releasify. The script is quite self-explanatory. The only trick I'm doing is that I'm "guessing" the name of the NuGet package from the build number, and signing the `Setup.exe` after it is created with my code certificate.
 
 <script src="https://gist.github.com/Gimly/359a8f1c26e5d0ca3097.js"></script>
 
@@ -198,17 +198,17 @@ Add an *Azure File Copy* build step to your build definition and click on the `M
 
 Back to the Build specification, you should now be able to select the subscription in the drop down list.
 
-Select the source to be the `./Release` folder created by Squirrel.
+Select the source to the `./Release` folder created by Squirrel.
 
 Next, the *Storage Account*. You will need to create one in Azure's interface. Follow the instructions on this [MSDN website](https://azure.microsoft.com/en-us/documentation/articles/storage-create-storage-account/) if you are lost, but it's really simple. Once you have created the *Storage Account*, you'll be able to get the *Name* and *Key* to use in the script to copy back the release folder. Add the name of the newly created Storage account into the *Azure File Copy* step.
 
-Destination should be set as *Azure Blob* and the container name can be set as anything you want. You don't have to create it as it will be automatically created by the step.
+Set destination as *Azure Blob* and the container name to anything you want. You don't have to create it as it will be automatically created by the step.
 
-Here's the final look at the whole build definition
+Here's the final look at the build definition
 
 ![alt text](/images/2015-11-12-vs-online-build-squirrel-windows/Whole_build_definition.jpg "Complete build definition")
 
-Run your build, and your application is ready to be installed using Squirrel, give your users the link to the `setup.exe` in your blob storage, and it will install the application.
+Run your build, and your application is ready to install using Squirrel, give your users the link to the `setup.exe` in your blob storage, and it will install the application.
 
 # Conclusion #
 
