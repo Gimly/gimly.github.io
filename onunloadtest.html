@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test page for onunload()</title>
+    <script type="text/javascript" language="javascript">
+        function displayLog(event){
+            console.log("onbeforeunload triggered");
+            alert("test");
+        }
+
+        window.onbeforeunload = displayLog
+    </script>
+</head>
+
+<body>
+
+    <h1>OnUnload</h1>
+    <p>This page should display a message in the console when closed.</p>
+
+</body>
+
+</html>
