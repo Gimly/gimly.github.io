@@ -10,8 +10,11 @@
             type: "PUT", //HTTP VERB
             url: "http://dark-haze-1355.getsandbox.com/onBeforeUnload", //URL
             contentType: 'application/json', //What type of data you are trying to send
-            data: '{"test": "Hello World"}'
+            data: '{"test": "Hello World"}',
+            async: false,
             });
+
+            return "onBeforeUnload";
         }
 
         function pageHidden(evt)
@@ -20,8 +23,11 @@
             type: "PUT", //HTTP VERB
             url: "http://dark-haze-1355.getsandbox.com/pageHidden", //URL
             contentType: 'application/json', //What type of data you are trying to send
-            data: '{"test": "Hello World"}'
+            data: '{"test": "Hello World"}',
+            async: false,
             });
+
+            return "pageHidden";
         }
 
         window.onbeforeunload = displayLog;
