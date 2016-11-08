@@ -18,7 +18,7 @@
                 alert("pagehide event handler called for page destruction.  This is the same as the unload event.");
             
             $.ajax({
-            type: "PUT", //HTTP VERB
+            method: "PUT", //HTTP VERB
             url: "http://dark-haze-1355.getsandbox.com/test", //URL
             dataType: 'json', //What type of response you expect back from the server
             contentType: 'application/json', //What type of data you are trying to send
