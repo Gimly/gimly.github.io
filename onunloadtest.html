@@ -9,7 +9,16 @@
             alert("test");
         }
 
-        window.onbeforeunload = displayLog
+        function pageHidden(evt)
+        {
+            if (evt.persisted)
+                alert("pagehide event handler called.  The page was suspended and placed into the Page Cache.");
+            else
+                alert("pagehide event handler called for page destruction.  This is the same as the unload event.");
+        }
+
+        window.onbeforeunload = displayLog;
+        window.addEventListener("pagehide", pageHidden, false);
     </script>
 </head>
 
