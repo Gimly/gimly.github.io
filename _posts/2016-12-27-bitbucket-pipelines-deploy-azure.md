@@ -96,7 +96,7 @@ git push -u origin master
 
 Once everything was pushed correctly, check that your source was correctly pushed by going to the *Source* option in Bitbucket.
 
-![Bitbucket source view]("/images/2016-12-27-bitbucket-pipelines-deploy-azure/BitbucketSourceView.jpg")
+![Bitbucket source view](/images/2016-12-27-bitbucket-pipelines-deploy-azure/BitbucketSourceView.jpg)
 
 Step 3: Create Azure App Services Web App
 -----------------------------------------
@@ -126,13 +126,13 @@ going to the repository's settings. In there, a *Pipelines* group contains *Sett
 
 Go to settings and click the button to enable Pipelines.
 
-![Enable Pipelines]("/images/2016-12-27-bitbucket-pipelines-deploy-azure/EnablePipelines.jpg")
+![Enable Pipelines](/images/2016-12-27-bitbucket-pipelines-deploy-azure/EnablePipelines.jpg)
 
 It will prompt you that the next step is to create the *bitbucket-pipelines.yml* file. By clicking the *Configure bitbucket-pipelines.yml* button,
 you'll be brought to a menu where you'll be able to select between a few templates for different languages and frameworks.
 Select *.NET Core* in the dropdown list and click *Next*.
 
-![Select .NET Core template]("/images/2016-12-27-bitbucket-pipelines-deploy-azure/SelectTemplate.jpg")
+![Select .NET Core template](/images/2016-12-27-bitbucket-pipelines-deploy-azure/SelectTemplate.jpg)
 
 It will open the text editor in Bitbucket and will allow you to modify it before doing a commit to add the file.
 
@@ -220,13 +220,13 @@ There are three variables that we need to setup, *FTP_USERNAME* which is the FTP
 
 Here's what it looks for me:
 
-![Environment variables]("/images/2016-12-27-bitbucket-pipelines-deploy-azure/EnvironmentVariables.jpg")
+![Environment_variables](/images/2016-12-27-bitbucket-pipelines-deploy-azure/EnvironmentVariables.jpg)
 
 ### Running the pipeline ###
 
 Now, if we change something and push it to the Bitbucket repository, it should trigger the pipeline execution. We can go to Bitbucket, in the Pipelines tab and follow the deployment process.
 
-![Pipelines result]("/images/2016-12-27-bitbucket-pipelines-deploy-azure/PipelinesResult.jpg")
+![Pipelines_result](/images/2016-12-27-bitbucket-pipelines-deploy-azure/PipelinesResult.jpg)
 
 Once everything is correctly copied to the FTP deployment folder, go to your Azure URL and check that everything is working correctly.
 
