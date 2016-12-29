@@ -5,7 +5,7 @@ permalink: /about/
 ---
 Passionate about my job and everything technological. Loves to solve problems and to try and learn new things.
 
-Senior Software developer currently working at [LS Instruments](http://lsinstruments.ch) 
+Senior Software developer currently working at [MOS MindOnSite](http://www.mindonsite.com/) 
 
 Find me on
 
