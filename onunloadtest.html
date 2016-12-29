@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test page for onunload()</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" language="javascript">
+        function displayLog(event){
+            $.ajax({
+            type: "PUT", //HTTP VERB
+            url: "http://dark-haze-1355.getsandbox.com/onBeforeUnload", //URL
+            contentType: 'application/json', //What type of data you are trying to send
+            data: '{"test": "Hello World"}',
+            async: false,
+            });
+
+            return "onBeforeUnload";
+        }
+
+        function pageHidden(evt)
+        {
+            $.ajax({
+            type: "PUT", //HTTP VERB
+            url: "http://dark-haze-1355.getsandbox.com/pageHidden", //URL
+            contentType: 'application/json', //What type of data you are trying to send
+            data: '{"test": "Hello World"}',
+            async: false,
+            });
+
+            return "pageHidden";
+        }
+
+        window.onbeforeunload = displayLog;
+        window.addEventListener("pagehide", pageHidden, false);
+    </script>
+</head>
+
+<body>
+
+    <h1>OnUnload</h1>
+    <p>This page should display a message in the console when closed.</p>
+
+</body>
+
+</html>
