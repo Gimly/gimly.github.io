@@ -11,8 +11,6 @@ tags:
 - Azure
 - Pipelines
 ---
-Continuous deployment of ASP.Net Core to Azure using Bitbucket Pipelines.
-====================================
 Bitbucket Pipelines is the new continuous delivery feature from Bitbucket.
 It is meant as a replacement for Bamboo cloud that will be discountinued by
 the end of January 2017.
